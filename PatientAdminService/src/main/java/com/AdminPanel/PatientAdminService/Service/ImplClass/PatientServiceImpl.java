@@ -1,14 +1,18 @@
 package com.AdminPanel.PatientAdminService.Service.ImplClass;
 
 import com.AdminPanel.PatientAdminService.DTO.PatientDto;
+import com.AdminPanel.PatientAdminService.DTO.PatientResponseDto;
 import com.AdminPanel.PatientAdminService.Entity.PatientDetails;
 import com.AdminPanel.PatientAdminService.Entity.PatientSequenceGenerator;
+import com.AdminPanel.PatientAdminService.Mapper.PatientMapper;
 import com.AdminPanel.PatientAdminService.Repository.PatientRepository;
 import com.AdminPanel.PatientAdminService.Service.Interface.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class PatientServiceImpl implements PatientService {
@@ -50,6 +54,19 @@ public class PatientServiceImpl implements PatientService {
         savedPatient.setFirstName(savePatient.getFirstName());
         savedPatient.setLastName(savePatient.getLastName());
         return savedPatient;
+
+    }
+
+    @Override
+    public List<PatientResponseDto> getPatientList() {
+        PatientMapper patientMapper = new PatientMapper();
+
+        List<PatientResponseDto> patientResponseDtos = new ArrayList<>();
+        List<PatientDetails> patientDetails = patientRepository.findAll();
+        for (PatientDetails p : patientDetails) {
+            patientResponseDtos.add(patientMapper.PatientResponseDtoMapper(p));
+        }
+        return patientResponseDtos;
 
     }
 }
